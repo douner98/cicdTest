@@ -18,10 +18,10 @@ pipeline {
         stage('DEPLOY') {
             steps {
                 
-                sh "echo 'start deploy'"
+                echo "start deploy"
 
                 script {
-
+                    echo "P_PROFILE: ${P_PROFILE}"
                     echo "SERVER_LIST: ${SERVER_LIST}"
 
                     switch("{$env.BRANCH_NAME}") {
