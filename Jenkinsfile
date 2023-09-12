@@ -21,12 +21,9 @@ pipeline {
                 echo "${env.BRANCH_NAME}"
                 echo "${SERVER_LIST}"
                 script {
-                    def gitUrl = env.GIT_URL
-                    def gitCredential = env.GIT_CREDENTIAL
-                    echo "init"
+                    echo "init start"
                     git branche: "${env.BRANCH_NAME}" , credentialsId: "${GIT_CREDENTIAL}" , url: "${GIT_URL}"
-
-//                    checkout([$class: 'GitSCM', branches: [[name: '*/${env.BRANCH_NAME}']], userRemoteConfigs: [[url: gitUrl, credentialsId: gitCredential]]])
+                    echo "init done"
                 }
             }
         }
