@@ -4,6 +4,7 @@ pipeline {
     environment{
         P_PROFILE = "${env.BRANCH_NAME == "develop" ? "dev" : env.BRANCH_NAME == "main" ? "stg" : "prd"}"
         SERVER_LIST = "${env.BRANCH_NAME == "develop" ? "jenkins_test_ec2" : env.BRANCH_NAME == "main" ? "jenkins_test_ec2" : "prd"}"
+        REMOTE_DIR = "/home/ec2-user/test"
     } 
 
     stages {
@@ -35,9 +36,6 @@ pipeline {
 
                     SERVER_LIST.tokenize(',').each{
                         echo "SERVER: ${it}"
-
-                        def server = getServer('${it}')
-                        def remoteDir = server.getRemoteDirectory()
                         
                         sshPublisher(
                             publishers: [
@@ -51,7 +49,7 @@ pipeline {
                                             makeEmptyDirs: false,
                                             noDefaultExcludes: false,
                                             patternSeparator: '[, ]+',
-                                            remoteDirectory: remoteDir,
+                                            remoteDirectory: '${REMOTE_DIR}',
                                             removePrefix: 'source',
                                             sourceFiles: '**/*'
                                         )
