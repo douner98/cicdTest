@@ -40,7 +40,7 @@ pipeline {
                         sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
-                                    configName: '${it}',
+                                    configName: "${it}",
                                     transfers: [
                                         sshTransfer(
                                             execCommand: '',
@@ -49,7 +49,7 @@ pipeline {
                                             makeEmptyDirs: false,
                                             noDefaultExcludes: false,
                                             patternSeparator: '[, ]+',
-                                            remoteDirectory: '${REMOTE_DIR}',
+                                            remoteDirectory: "${REMOTE_DIR}",
                                             removePrefix: 'source',
                                             sourceFiles: '**/*'
                                         )
