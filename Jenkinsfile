@@ -7,7 +7,7 @@ pipeline {
             GIT_URL = "https://github.com/douner98/cicdTest.git"
             GIT_CREDENTIAL = 'gitHubDouner98'
             P_PROFILE = "${env.BRANCH_NAME == "develop" ? "dev" : env.BRANCH_NAME == "main" ? "stg" : "prd"}"
-            SERVER_LIST = "${env.BRANCH_NAME == "develop" ? "jenkins_test_ec2" : "env.BRANCH_NAME == "main" ? "jenkins_test_ec2" : "prd"}"
+            SERVER_LIST = "${env.BRANCH_NAME == "develop" ? "jenkins_test_ec2" : env.BRANCH_NAME == "main" ? "jenkins_test_ec2" : "prd"}"
         }
 
          stage('Checkout AAA') {
