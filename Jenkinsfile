@@ -13,9 +13,9 @@ pipeline {
          stage('Checkout AAA') {
 
             steps {
-                sh "echo ${P_PROFILE}"
-                sh "echo ${env.BRANCH_NAME}"
-                sh "echo ${SERVER_LIST}"
+                echo "${P_PROFILE}"
+                echo "${env.BRANCH_NAME}"
+                echo "${SERVER_LIST}"
                 script {
                     def gitUrl = env.GIT_URL
                     def gitCredential = env.GIT_CREDENTIAL
