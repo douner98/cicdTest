@@ -15,16 +15,21 @@ pipeline {
                 script {
                     def gitUrl = env.GIT_URL
                     def gitCredential = env.GIT_CREDENTIAL
-                    checkout([$class: 'GitSCM', branches: "{$env.BRANCH_NAME}", userRemoteConfigs: [[url: gitUrl, credentialsId: gitCredential]]])
+                    checkout([$class: 'GitSCM', branches: [[name: '*/"${env.BRANCH_NAME}"']], userRemoteConfigs: [[url: gitUrl, credentialsId: gitCredential]]])
                 }
             }
         }
         
-        stage('Deploy') {
+        stage('DEPLOY') {
             steps {
                 // "Publish Over SSH" 플러그인을 사용하여 파일을 원격 서버로 업로드
 
+                sh "echo 'start deploy'"
+
                 script {
+
+                    echo "SERVER_LIST: ${SERVER_LIST}"
+
                     switch("{$env.BRANCH_NAME}") {
                         case "develop":
                             echo "develop"
