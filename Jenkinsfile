@@ -22,8 +22,7 @@ pipeline {
         
         stage('DEPLOY') {
             steps {
-                // "Publish Over SSH" 플러그인을 사용하여 파일을 원격 서버로 업로드
-
+                
                 sh "echo 'start deploy'"
 
                 script {
