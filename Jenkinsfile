@@ -36,6 +36,8 @@ pipeline {
                     SERVER_LIST.tokenize(',').each{
                         echo "SERVER: ${it}"
 
+                        def server = getServer('${it}')
+                        def remoteDir = server.getRemoteDirectory()
                         
                         sshPublisher(
                             publishers: [
