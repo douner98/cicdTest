@@ -10,7 +10,7 @@ pipeline {
             SERVER_LIST = "${env.BRANCH_NAME == "develop" ? "jenkins_test_ec2" : "env.BRANCH_NAME == "main" ? "jenkins_test_ec2" : "prd"}"
         }
 
-         stage('Checkout') {
+         stage('Checkout AAA') {
             steps {
                 script {
                     def gitUrl = env.GIT_URL
