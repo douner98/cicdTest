@@ -24,7 +24,7 @@ pipeline {
                     def gitUrl = env.GIT_URL
                     def gitCredential = env.GIT_CREDENTIAL
                     echo "init"
-                    git branche: "${env.BRANCH_NAME}" , credentialsId: "${GIT_CREDENTIAL}" , url "${GIT_URL}"
+                    git branche: "${env.BRANCH_NAME}" , credentialsId: "${GIT_CREDENTIAL}" , url: "${GIT_URL}"
 
 //                    checkout([$class: 'GitSCM', branches: [[name: '*/${env.BRANCH_NAME}']], userRemoteConfigs: [[url: gitUrl, credentialsId: gitCredential]]])
                 }
