@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools{
+        git 'Default'
+    }
+
     environment{
         GIT_URL = "https://github.com/douner98/cicdTest.git"
         GIT_CREDENTIAL = 'gitHubDouner98'
