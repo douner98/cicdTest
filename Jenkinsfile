@@ -50,7 +50,7 @@ pipeline {
                                             noDefaultExcludes: false,
                                             patternSeparator: '[, ]+',
                                             remoteDirectory: "${REMOTE_DIR}",
-                                            //removePrefix: 'source',
+                                            removePrefix: "${REMOTE_DIR}",
                                             sourceFiles: '**/*'
                                         )
                                     ],
