@@ -7,11 +7,15 @@ pipeline {
         P_PROFILE = "${env.BRANCH_NAME == "develop" ? "dev" : env.BRANCH_NAME == "main" ? "stg" : "prd"}"
         SERVER_LIST = "${env.BRANCH_NAME == "develop" ? "jenkins_test_ec2" : env.BRANCH_NAME == "main" ? "jenkins_test_ec2" : "prd"}"
     } 
-    
+
     stages {
  
          stage('Checkout AAA') {
+
             steps {
+                sh "echo ${P_PROFILE}"
+                sh "echo ${env.BRANCH_NAME}"
+                sh "echo ${SERVER_LIST}"
                 script {
                     def gitUrl = env.GIT_URL
                     def gitCredential = env.GIT_CREDENTIAL
