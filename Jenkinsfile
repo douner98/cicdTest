@@ -10,6 +10,7 @@ pipeline {
                         COM/SH
                         COM/PY
                         COM/SH/AA1
+                        COM/SH/AA2
                     """
     } 
 
