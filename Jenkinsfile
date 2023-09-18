@@ -7,8 +7,8 @@ pipeline {
         REMOTE_ROOT_DIR = "/sorc001/BATCH"
 //        REMOTE_SUB_DIR = "COM/SH,COM/PY,COM/SH/AA1" // 디렉토리 목록을 쉼표로 구분하여 환경 변수에 저장
         REMOTE_SUB_DIR = """
-                        COM/SH,
-                        COM/PY,
+                        COM/SH
+                        COM/PY
                         COM/SH/AA1
                     """
     } 
@@ -46,7 +46,7 @@ pipeline {
                     }
 
                     // 폴더 목록을 쉼표로 분리하여 배열로 만듭니다.
-                    def directorys = env.REMOTE_SUB_DIR.split(',')
+                    def directorys = env.REMOTE_SUB_DIR.split('\n')
 
                     SERVER_LIST.tokenize(',').each{
                         echo "SERVER: ${it}"
