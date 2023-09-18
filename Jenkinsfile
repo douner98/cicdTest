@@ -53,14 +53,14 @@ pipeline {
 
                         // 각 폴더에 대한 루프
                         for (def dir in directorys) {
-                            
+                            def trimmedDir = dir.trim()
                             sshPublisher(
                                 publishers: [
                                     sshPublisherDesc(
                                         configName: "${it}",
                                         transfers: [
                                             sshTransfer(
-                                                execCommand: "mkdir -p /${REMOTE_ROOT_DIR}/${dir}" // 폴더 생성 명령
+                                                execCommand: "mkdir -p /${REMOTE_ROOT_DIR}/${trimmedDir}" // 폴더 생성 명령
                                             ),
                                             sshTransfer(
                                                 execCommand: '',
@@ -69,9 +69,9 @@ pipeline {
                                                 makeEmptyDirs: false,
                                                 noDefaultExcludes: false,
                                                 patternSeparator: '[, ]+',
-                                                remoteDirectory: "${REMOTE_ROOT_DIR}/${dir}",
-                                                removePrefix: "${dir}/", // 복사할 파일의 기본 경로를 설정
-                                                sourceFiles: "${dir}/*.sh, ${dir}/*.py, ${dir}/*.sql"
+                                                remoteDirectory: "${REMOTE_ROOT_DIR}/${trimmedDir}",
+                                                removePrefix: "${trimmedDir}/", // 복사할 파일의 기본 경로를 설정
+                                                sourceFiles: "${trimmedDir}/*.sh, ${trimmedDir}/*.py, ${trimmedDir}/*.sql"
                                             )
                                         ],
                                         usePromotionTimestamp: false,
