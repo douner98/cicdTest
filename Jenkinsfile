@@ -45,21 +45,18 @@ pipeline {
 
                     SERVER_LIST.tokenize(',').each{
                         echo "SERVER: ${it}"
-                        def sshServer = credentials("${it}") // SSH 서버 설정의 자격 증명 ID
 
                         // 각 폴더에 대한 루프
                         for (def folder in folders) {
-
-                            sshCommand(
-                                remote: sshServer, // SSH 서버 설정
-                                command: "mkdir -p /sorc001/BATCH/${folder}" // 실행할 SSH 명령
-                            )
                             
                             sshPublisher(
                                 publishers: [
                                     sshPublisherDesc(
                                         configName: "${it}",
                                         transfers: [
+                                            sshTransfer(
+                                                execCommand: "mkdir -p /sorc001/BATCH/${folder}" // 실행할 SSH 명령
+                                            ),
                                             sshTransfer(
                                                 execCommand: '',
                                                 execTimeout: 120000,
