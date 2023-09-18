@@ -56,7 +56,7 @@ pipeline {
                                             patternSeparator: '[, ]+',
                                             remoteDirectory: "${REMOTE_DIR}",
                                             removePrefix: "${REMOTE_DIR}",
-                                            sourceFiles: '**/*'
+                                            sourceFiles: "${REMOTE_DIR}/**/*"
                                         )
                                     ],
                                     usePromotionTimestamp: false,
