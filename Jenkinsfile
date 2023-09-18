@@ -7,6 +7,11 @@ pipeline {
         REMOTE_DIR = "/home/ec2-user/test"
     } 
 
+    parameters{
+        choice(name:'SONARQUBE' , choice: ['NO','YES'])
+        choice(name:'TEST' , choice: ['NO','YES'])
+    }
+
     stages {
 
         stage('Checkout') {
