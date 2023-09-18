@@ -49,7 +49,7 @@ pipeline {
                         // 각 폴더에 대한 루프
                         for (def folder in folders) {
 
-                            sshCommand(remote: ${it}, command: "mkdir -p /sorc001/BATCH/${folder}")
+                            sshCommand(remote: "${it}", command: "mkdir -p /sorc001/BATCH/${folder}")
                             
                             sshPublisher(
                                 publishers: [
