@@ -1,15 +1,25 @@
 pipeline {
     agent any
 
+    // 환경변수 설정
     environment{
+        // 개발배포 or 운영배포 여부
         P_PROFILE = "${env.BRANCH_NAME == "develop" ? "dev" : env.BRANCH_NAME == "main" ? "stg" : "prd"}"
+
+        // 타겟서버 정보 (Jenkins SSH Server에 등록된 정보 : Jenkins 관리자 권한)
         SERVER_LIST = "${env.BRANCH_NAME == "develop" ? "jenkins_test_ec2" : env.BRANCH_NAME == "main" ? "jenkins_test_ec2" : "prd"}"
+
+        // 타겟서버 배포 경로
         REMOTE_ROOT_DIR = "/sorc001/BATCH"
-//        REMOTE_SUB_DIR = "COM/SH,COM/PY,COM/SH/AA1" // 디렉토리 목록을 쉼표로 구분하여 환경 변수에 저장
+
+        // Jenkins은 Git에 등록된 폴더는 자동으로 생성 해주는 기능이 없음
+        // 배포 해야할 디렉토리가 추가될 경우 아래와 같이 추가할 것!
+        // $REMOTE_ROOT_DIR/BATCH/COM 배포 경로
         REMOTE_BATCH_COM_DIR = """
                         COM/SH
                         COM/PY
                     """
+        // $REMOTE_ROOT_DIR/BATCH/ORG 배포 경로
         REMOTE_BATCH_ORG_DIR = """
                         ORG/AAA
                         ORG/AAA/AA1
@@ -17,9 +27,9 @@ pipeline {
                     """
     } 
 
-    parameters{
-        choice(name:'SONARQUBE' , choices: ['NO','YES'])
-        choice(name:'TEST' , choices: ['NO','YES'])
+    parameters {
+        booleanParam(name: 'DEPLOY_BATCH_COM', defaultValue: true, description: "${REMOTE_ROOT_DIR}/BATCH/COM 경로에 배포 하시겠습니까?")
+        booleanParam(name: 'DEPLOY_BATCH_ORG', defaultValue: true, description: "${REMOTE_ROOT_DIR}/BATCH/ORG 경로에 배포 하시겠습니까?")
     }
 
     stages {
@@ -32,10 +42,17 @@ pipeline {
         }
         
         stage('DEPLOY BATCH COM') {
+            when {
+                expression {
+                    def isRun = params.DEPLOY_BATCH_COM == true
+                    if (!isRun) {
+                        echo 'Skipping Stage A because DEPLOY_BATCH_COM is set to false'
+                    }
+                    return isRun
+                }
+            }
             steps {
-                
                 echo "Start DEPLOY ${REMOTE_ROOT_DIR}/BATCH/COM"
-
                 script {
                     echo "P_PROFILE: ${P_PROFILE}"
                     echo "SERVER_LIST: ${SERVER_LIST}"
@@ -95,8 +112,16 @@ pipeline {
         }
 
         stage('DEPLOY BATCH ORG') {
+            when {
+                expression {
+                    def isRun = params.DEPLOY_BATCH_ORG == true
+                    if (!isRun) {
+                        echo 'Skipping Stage A because DEPLOY_BATCH_ORG is set to false'
+                    }
+                    return isRun
+                }
+            }
             steps {
-                
                 echo "Start DEPLOY ${REMOTE_ROOT_DIR}/BATCH/ORG"
 
                 script {
