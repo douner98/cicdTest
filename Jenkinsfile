@@ -51,11 +51,11 @@ pipeline {
                                             execCommand: '',
                                             execTimeout: 120000,
                                             flatten: false,
-                                            makeEmptyDirs: false,
+                                            makeEmptyDirs: true,
                                             noDefaultExcludes: false,
                                             patternSeparator: '[, ]+',
                                             remoteDirectory: "${REMOTE_DIR}",
-                                            removePrefix: "/sorc001/BATCH",
+                                            removePrefix: "${REMOTE_DIR}",
                                             sourceFiles: '**/*'
                                         )
                                     ],
