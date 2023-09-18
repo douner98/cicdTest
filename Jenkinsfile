@@ -28,8 +28,8 @@ pipeline {
     } 
 
     parameters {
-        booleanParam(name: 'DEPLOY_BATCH_COM', defaultValue: true, description: "/BATCH/COM 경로에 파일을 배포 하시겠습니까?")
-        booleanParam(name: 'DEPLOY_BATCH_ORG', defaultValue: true, description: "/BATCH/ORG 경로에 파일을 배포 하시겠습니까?")
+        booleanParam(name: 'DEPLOY_BATCH_COM', defaultValue: true, description: "deploy files to the /BATCH/COM path?")
+        booleanParam(name: 'DEPLOY_BATCH_ORG', defaultValue: true, description: "deploy files to the /BATCH/ORG path?")
     }
 
     stages {
