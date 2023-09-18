@@ -49,8 +49,7 @@ pipeline {
                         // 각 폴더에 대한 루프
                         for (def folder in folders) {
 
-                            def sshServer = findSshServer("${it}")
-
+                            def sshServer = credentials("${it}") // SSH 서버 설정의 자격 증명 ID
                             sshCommand(remote: sshServer, command: "mkdir -p /sorc001/BATCH/${folder}")
                             
                             sshPublisher(
