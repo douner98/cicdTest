@@ -8,8 +8,8 @@ pipeline {
     } 
 
     parameters{
-        choice(name:'SONARQUBE' , choice: ['NO','YES'])
-        choice(name:'TEST' , choice: ['NO','YES'])
+        choice(name:'SONARQUBE' , choices: ['NO','YES'])
+        choice(name:'TEST' , choices: ['NO','YES'])
     }
 
     stages {
