@@ -28,6 +28,7 @@ pipeline {
     } 
 
     parameters {
+         string(name: 'MESSAGE', defaultValue: 'Hello, Jenkins!', description: 'Message to display')
         booleanParam(name: 'DEPLOY_BATCH_COM', defaultValue: true, description: "deploy files to the /BATCH/COM path?")
         booleanParam(name: 'DEPLOY_BATCH_ORG', defaultValue: true, description: "deploy files to the /BATCH/ORG path?")
     }
