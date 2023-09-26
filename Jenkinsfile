@@ -62,12 +62,12 @@ pipeline {
                     def sourceEnvFile = ''
                     def targetEnvFile = 'anenv.ini'
 
-                    switch("{$env.BRANCH_NAME}") {
-                        case "develop":
+                    switch("{$P_PROFILE}") {
+                        case "dev":
                             echo "develop DEPLOY"
                             sourceEnvFile = 'env_dev.ini'
                             break
-                        case "main":
+                        case "prd":
                             echo "prod DEPLOY"
                             sourceEnvFile = 'env_prd.ini'
                             break
