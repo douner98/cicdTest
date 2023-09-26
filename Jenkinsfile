@@ -81,11 +81,12 @@ pipeline {
 
                         echo "sourceEnvFile: ${sourceEnvFile}"
                         echo "targetEnvFile: ${targetEnvFile}"
-
-                        echo "cp /${REMOTE_ROOT_DIR}/${trimmedDir}/${sourceEnvFile} /${REMOTE_ROOT_DIR}/${trimmedDir}/${targetEnvFile}"
                         
                         def trimmedDir = dir.trim() // 공백 제거
                         echo "DEPLOY Start ${REMOTE_ROOT_DIR}/${trimmedDir}"
+
+                        echo "cp /${REMOTE_ROOT_DIR}/${trimmedDir}/${sourceEnvFile} /${REMOTE_ROOT_DIR}/${trimmedDir}/${targetEnvFile}"
+
                         sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
