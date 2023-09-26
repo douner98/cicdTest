@@ -12,6 +12,8 @@ pipeline {
         // 타겟서버 배포 경로
         REMOTE_ROOT_DIR = "/sorc001/BATCH"
 
+        REMOTE_BATCH_ENV_DIR = "COM/ENV"
+
         // Jenkins은 Git에 등록된 폴더는 자동으로 생성 해주는 기능이 없음
         // 배포 해야할 디렉토리가 추가될 경우 아래와 같이 추가할 것!
         // $REMOTE_ROOT_DIR/BATCH/COM 배포 경로
@@ -28,7 +30,7 @@ pipeline {
     } 
 
     parameters {
-         string(name: 'MESSAGE', description: 'Message to display')
+        booleanParam(name: 'DEPLOY_BATCH_COM_ENV', defaultValue: true, description: "deploy files to the /BATCH/COM/ENV path?")
         booleanParam(name: 'DEPLOY_BATCH_COM', defaultValue: true, description: "deploy files to the /BATCH/COM path?")
         booleanParam(name: 'DEPLOY_BATCH_ORG', defaultValue: true, description: "deploy files to the /BATCH/ORG path?")
     }
@@ -39,6 +41,78 @@ pipeline {
             steps {
                 // Git 리포지토리에서 소스 코드 체크아웃
                 checkout scm
+            }
+        }
+
+        stage('DEPLOY BATCH COM ENV') {
+            when {
+                expression {
+                    def isRun = params.DEPLOY_BATCH_COM_ENV == true
+                    if (!isRun) {
+                        echo 'Skipping Stage A because DEPLOY_BATCH_COM_ENV is set to false'
+                    }
+                    return isRun
+                }
+            }
+            steps {
+                echo "Start DEPLOY ${REMOTE_ROOT_DIR}/BATCH/COM/ENV"
+                script {
+                    echo "P_PROFILE: ${P_PROFILE}"
+                    echo "SERVER_LIST: ${SERVER_LIST}"
+                    def sourceEnvFile = ''
+                    def targetEnvFile = 'anenv.ini'
+
+                    switch("{$env.BRANCH_NAME}") {
+                        case "develop":
+                            echo "develop DEPLOY"
+                            sourceEnvFile = 'env_dev.ini'
+                            break
+                        case "main":
+                            echo "prod DEPLOY"
+                            sourceEnvFile = 'env_prd.ini'
+                            break
+                    }
+
+                    // REMOTE_BATCH_COM_DIR 목록 분리하여 배열 저장.
+                    def dir = env.REMOTE_BATCH_ENV_DIR
+
+                    SERVER_LIST.tokenize(',').each{
+                        echo "DEPLOY J-JOBS SERVER: ${it}"
+                        
+                        def trimmedDir = dir.trim() // 공백 제거
+                        echo "DEPLOY Start ${REMOTE_ROOT_DIR}/${trimmedDir}"
+                        sshPublisher(
+                            publishers: [
+                                sshPublisherDesc(
+                                    configName: "${it}",
+                                    transfers: [
+                                        sshTransfer(
+                                            execCommand: "mkdir -p /${REMOTE_ROOT_DIR}/${trimmedDir}" // 디렉토리 생성
+                                        ),
+                                        sshTransfer(
+                                            execCommand: "cp /${REMOTE_ROOT_DIR}/${trimmedDir}/${sourceEnvFile} /${REMOTE_ROOT_DIR}/${trimmedDir}/${targetEnvFile}",
+                                            execTimeout: 120000,
+                                            flatten: false,
+                                            makeEmptyDirs: false,
+                                            noDefaultExcludes: false,
+                                            patternSeparator: '[, ]+',
+                                            remoteDirectory: "${REMOTE_ROOT_DIR}/${trimmedDir}",
+                                            removePrefix: "${trimmedDir}/", // 복사할 파일의 기본 경로를 설정
+                                            sourceFiles: "${trimmedDir}/*.ini"
+                                        )
+                                    ],
+                                    usePromotionTimestamp: false,
+                                    useWorkspaceInPromotion: false,
+                                    verbose: false
+                                )
+                            ]
+                        )
+                        echo "DEPLOY Done ${REMOTE_ROOT_DIR}/${trimmedDir}"
+                        
+                    }
+                }
+
+                echo "Finish DEPLOY ${REMOTE_ROOT_DIR}/BATCH/COM"
             }
         }
         
